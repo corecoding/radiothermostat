@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "radiothermostat plugin for homebridge: https://github.com/nfarina/homebridge",
   "main": "index.js",
-  "dependencies": {},
+  "dependencies": {
+    "request": "^2.65.0"
+  },
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
