@@ -1,6 +1,6 @@
 {
   "name": "homebridge-radiothermostat",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "radiothermostat plugin for homebridge: https://github.com/nfarina/homebridge",
   "main": "index.js",
   "dependencies": {
@@ -15,12 +15,18 @@
     "url": "git+https://github.com/fordracerguy/radiothermostat.git"
   },
   "keywords": [
-    "homebridge-plugin"
+    "homebridge-plugin",
+    "thermostat",
+    "radio"
   ],
   "author": "Chris Monahan <cobra@corecoding.com> (http://www.corecoding.com)",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/fordracerguy/radiothermostat/issues"
   },
-  "homepage": "https://github.com/fordracerguy/radiothermostat#readme"
+  "homepage": "https://github.com/fordracerguy/radiothermostat#readme",
+  "engines": {
+    "homebridge": ">=0.2.0",
+    "node": ">=0.12.0"
+  }
 }
