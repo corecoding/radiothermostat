@@ -31,6 +31,7 @@ function Thermostat(log, config) {
 
   this.currentTemperature = 19;
   this.targetTemperature = 21;
+  this.currentRelativeHumidity = 0;
   this.heatingThresholdTemperature = 24;
   this.coolingThresholdTemperature = 5;
   this.lastUpdate = 0;
@@ -137,6 +138,21 @@ Thermostat.prototype = {
     }.bind(this));
   },
 
+  getCurrentRelativeHumidity: function(callback) {
+    this.log('getCurrentRelativeHumidity from:', this.apiroute + '/tstat/humidity');
+
+    this.requestWrapper('tstat/humidity', null, function(error, json) {
+      if (error) {
+        this.log('getCurrentRelativeHumidity error: %s', error);
+        callback(error);
+      } else {
+        this.currentRelativeHumidity = json.humidity;
+        this.log('CurrentRelativeHumidity %s', this.currentRelativeHumidity);
+        callback(null, this.currentRelativeHumidity);
+      }
+    }.bind(this));
+  },
+
   getCurrentTemperature: function(callback) {
     this.log('getCurrentTemperature from:', this.apiroute + '/tstat');
 
@@ -236,6 +252,7 @@ Thermostat.prototype = {
     this.service.getCharacteristic(Characteristic.TargetHeatingCoolingState)  .on('get', this.getTargetHeatingCoolingState.bind(this))   .on('set', this.setTargetHeatingCoolingState.bind(this));
     this.service.getCharacteristic(Characteristic.CurrentTemperature)         .on('get', this.getCurrentTemperature.bind(this));
     this.service.getCharacteristic(Characteristic.TargetTemperature)          .on('get', this.getTargetTemperature.bind(this))           .on('set', this.setTargetTemperature.bind(this));
+    this.service.getCharacteristic(Characteristic.CurrentRelativeHumidity)    .on('get', this.getCurrentRelativeHumidity.bind(this));
     this.service.getCharacteristic(Characteristic.TemperatureDisplayUnits)    .on('get', this.getTemperatureDisplayUnits.bind(this))     .on('set', this.setTemperatureDisplayUnits.bind(this));
 
     // optional
