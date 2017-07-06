@@ -147,7 +147,9 @@ Thermostat.prototype = {
         callback(error);
       } else {
         this.currentRelativeHumidity = json.humidity;
+        this.humidityService.currentRelativeHumidity = json.humidity;
         this.log('CurrentRelativeHumidity %s', this.currentRelativeHumidity);
+        this.log('HumidityService CurrentRelativeHumidity %s', this.humidityService.currentRelativeHumidity);
         callback(null, this.currentRelativeHumidity);
       }
     }.bind(this));
@@ -252,8 +254,11 @@ Thermostat.prototype = {
     this.service.getCharacteristic(Characteristic.TargetHeatingCoolingState)  .on('get', this.getTargetHeatingCoolingState.bind(this))   .on('set', this.setTargetHeatingCoolingState.bind(this));
     this.service.getCharacteristic(Characteristic.CurrentTemperature)         .on('get', this.getCurrentTemperature.bind(this));
     this.service.getCharacteristic(Characteristic.TargetTemperature)          .on('get', this.getTargetTemperature.bind(this))           .on('set', this.setTargetTemperature.bind(this));
-    this.service.getCharacteristic(Characteristic.CurrentRelativeHumidity)    .on('get', this.getCurrentRelativeHumidity.bind(this));
     this.service.getCharacteristic(Characteristic.TemperatureDisplayUnits)    .on('get', this.getTemperatureDisplayUnits.bind(this))     .on('set', this.setTemperatureDisplayUnits.bind(this));
+
+    this.humidityService = new Service.HumiditySensor(this.name);
+    this.service.getCharacteristic(Characteristic.CurrentRelativeHumidity)         .on('get', this.getCurrentRelativeHumidity.bind(this));
+    this.humidityService.getCharacteristic(Characteristic.CurrentRelativeHumidity) .on('get', this.getCurrentRelativeHumidity.bind(this));
 
     // optional
     //this.service.getCharacteristic(Characteristic.CoolingThresholdTemperature).on('get', this.getCoolingThresholdTemperature.bind(this));
@@ -263,6 +268,6 @@ Thermostat.prototype = {
     this.service.getCharacteristic(Characteristic.CurrentTemperature).setProps({ minValue: this.minTemp, maxValue: this.maxTemp, minStep: 1 });
     this.service.getCharacteristic(Characteristic.TargetTemperature).setProps({ minValue: this.minTemp, maxValue: this.maxTemp, minStep: 1 });
 
-    return [informationService, this.service];
+    return [informationService, this.service, this.humidityService];
   }
 };
